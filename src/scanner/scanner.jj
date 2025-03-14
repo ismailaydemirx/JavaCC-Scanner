@@ -1,0 +1,60 @@
+options {
+    STATIC = false;
+}
+
+PARSER_BEGIN(SimpleParser)
+import java.io.*;
+public class SimpleParser {
+    public static void main(String[] args) {
+        try {
+            SimpleParser parser = new SimpleParser(new FileInputStream("input.txt"));
+            parser.Start();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+}
+PARSER_END(SimpleParser)
+
+// Boşluk karakterlerini atla
+SKIP: {
+    " "
+    | "\t"
+    | "\n"
+    | "\r"
+}
+
+TOKEN: {
+    < IF: "if" >
+    | < WHILE: "while" >
+    | < FOR: "for" >
+    | < PRINT: "print" >
+    | < DIGIT: ["0"-"9"] >
+    | < ID: ["a"-"z", "A"-"Z"] ( ["a"-"z", "A"-"Z"] | <DIGIT> )* >
+    | < NUM: (<DIGIT>)+ >
+    | < REAL: (<DIGIT>)+ "." (<DIGIT>)* >
+    | < YORUM: "--" (~["\n", "\r"])* ("\n" | "\r" | "\r\n")? >
+    | < STRING: "\"" (~["\""])* "\"" >
+    | < EQUALS: "==" >
+    | < MULTILINE_COMMENT: "/*" (~["*"] | "*" ~["/"])* "*/" >
+}
+
+void Start():
+{
+    Token t;
+}
+{
+    (
+        t = <IF>       { System.out.println("IF: " + t.image); }
+        | t = <WHILE>  { System.out.println("WHILE: " + t.image); }
+        | t = <FOR>    { System.out.println("FOR: " + t.image); }
+        | t = <PRINT>  { System.out.println("PRINT: " + t.image); }
+        | t = <ID>     { System.out.println("ID: " + t.image); }
+        | t = <NUM>    { System.out.println("NUM: " + t.image); }
+        | t = <REAL>   { System.out.println("REAL: " + t.image); }
+        | t = <YORUM>  { System.out.println("YORUM: " + t.image); }
+        | t = <STRING> { System.out.println("STRING: " + t.image); }
+        | t = <EQUALS> { System.out.println("EQUALS: " + t.image); }
+        | t = <MULTILINE_COMMENT> { System.out.println("MULTILINE_COMMENT: " + t.image); }
+    )*
+}

@@ -1,0 +1,7 @@
+if x 123 45.67 -- This is a comment
+/* This is a
+   multi-line comment */
+while y 987 3.14 -- Another comment
+for i 0 10 -- Loop counter
+print "Hello, World!" 42 7.89
+x == a
